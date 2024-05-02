@@ -108,8 +108,16 @@ public class ClienteController {
             })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<PageableDto> buscarTodos(@Parameter(hidden = true) @PageableDefault(size = 5, sort = {"nome"}) Pageable pageable) {
+    public ResponseEntity<PageableDto> getAll(@Parameter(hidden = true) @PageableDefault(size = 5, sort = {"nome"}) Pageable pageable) {
         Page<ClienteProjection> clientes = clienteService.getAll(pageable);
         return ResponseEntity.ok(PageableMapper.toDto(clientes));
+    }
+
+    @GetMapping("/detalhes")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<ClienteResponseDto> getDetalhes(@AuthenticationPrincipal JwtUserDetails userDetails) {
+
+        Cliente cliente = clienteService.buscarPorUsuarioId(userDetails.getId());
+        return ResponseEntity.ok().body(ClienteMapper.toDto(cliente));
     }
 }
