@@ -14,10 +14,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VagaService {
 
-    private VagaRepository vagaRepository;
+    private final VagaRepository vagaRepository;
 
     @Transactional
-
     public Vaga salvar(Vaga vaga) {
         try {
             return vagaRepository.save(vaga);
@@ -31,7 +30,7 @@ public class VagaService {
     @Transactional
     @ReadOnlyProperty
     public Vaga buscarPorCodigo(String codigo) {
-        return vagaRepository.findByCoddigo(codigo).orElseThrow(
+        return vagaRepository.findByCodigo(codigo).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Vaga com código %s não foi encontrada", codigo))
         );
     }

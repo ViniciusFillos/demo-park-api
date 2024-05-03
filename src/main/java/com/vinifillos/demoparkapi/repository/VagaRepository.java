@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface VagaRepository extends JpaRepository<Vaga, Long> {
-    Optional<Vaga> findByCoddigo(String codigo);
+    Optional<Vaga> findByCodigo(String codigo);
 }
