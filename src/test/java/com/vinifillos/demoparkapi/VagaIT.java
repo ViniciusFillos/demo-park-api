@@ -18,7 +18,7 @@ public class VagaIT {
     WebTestClient testClient;
 
     @Test
-    public void criarVaga_ComDaddosValidos_RetornarLocationStatus201() {
+    public void criarVaga_ComDaddosValidos_RetornarLocationComStatus201() {
         testClient
                 .post()
                 .uri("api/v1/vagas")
@@ -28,5 +28,50 @@ public class VagaIT {
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader().exists(HttpHeaders.LOCATION);
+    }
+
+    @Test
+    public void criarVaga_ComCodigoJaExistente_RetornarErrorMessageComStatus409() {
+        testClient
+                .post()
+                .uri("api/v1/vagas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(new VagaCreateDto("A-01", "LIVRE"))
+                .exchange()
+                .expectStatus().isEqualTo(409)
+                .expectBody()
+                .jsonPath("status").isEqualTo(409)
+                .jsonPath("method").isEqualTo("POST")
+                .jsonPath("path").isEqualTo("/api/v1/vagas");
+    }
+
+    @Test
+    public void criarVaga_ComDadosInvalidos_RetornarErrorMessageComStatus422() {
+        testClient
+                .post()
+                .uri("api/v1/vagas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(new VagaCreateDto("", ""))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody()
+                .jsonPath("status").isEqualTo(422)
+                .jsonPath("method").isEqualTo("POST")
+                .jsonPath("path").isEqualTo("/api/v1/vagas");
+
+        testClient
+                .post()
+                .uri("api/v1/vagas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(new VagaCreateDto("12345", "TESTE"))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody()
+                .jsonPath("status").isEqualTo(422)
+                .jsonPath("method").isEqualTo("POST")
+                .jsonPath("path").isEqualTo("/api/v1/vagas");
     }
 }
