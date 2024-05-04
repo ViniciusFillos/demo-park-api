@@ -179,4 +179,54 @@ public class EstacionamentoIT {
                 .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
                 .jsonPath("method").isEqualTo("POST");
     }
+
+    @Test
+    public void criarCheckIn_ComCpfInexistente_RetornarErrorMessageComStatus404() {
+        EstacionamentoCreateDto createDto = EstacionamentoCreateDto.builder()
+                .placa("AAA-1A11")
+                .marca("PORSCHE")
+                .modelo("911")
+                .cor("AZUL")
+                .clienteCpf("05107347070")
+                .build();
+
+        testClient
+                .post()
+                .uri("/api/v1/estacionamentos/check-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(createDto)
+                .exchange()
+                .expectStatus().isEqualTo(404)
+                .expectBody()
+                .jsonPath("status").isEqualTo("404")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
+                .jsonPath("method").isEqualTo("POST");
+    }
+
+    @Sql(scripts = "/sql/estacionamentos/estacionamento-insert-vagas-ocupadas.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/sql/estacionamentos/estacionamento-delete-vagas-ocupadas.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Test
+    public void criarCheckIn_ComVagasOcupadas_RetornarErrorMessageComStatus404() {
+        EstacionamentoCreateDto createDto = EstacionamentoCreateDto.builder()
+                .placa("AAA-1A11")
+                .marca("PORSCHE")
+                .modelo("911")
+                .cor("AZUL")
+                .clienteCpf("60341191973")
+                .build();
+
+        testClient
+                .post()
+                .uri("/api/v1/estacionamentos/check-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(createDto)
+                .exchange()
+                .expectStatus().isEqualTo(404)
+                .expectBody()
+                .jsonPath("status").isEqualTo("404")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
+                .jsonPath("method").isEqualTo("POST");
+    }
 }

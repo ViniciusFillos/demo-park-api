@@ -9,12 +9,16 @@ INSERT INTO clientes (id, nome, cpf, id_usuario) VALUES (20, 'Beatriz Luz','6034
 insert into vagas (id, codigo, status) values (100, 'A-01', 'OCUPADA');
 insert into vagas (id, codigo, status) values (200, 'A-02', 'OCUPADA');
 insert into vagas (id, codigo, status) values (300, 'A-03', 'OCUPADA');
-insert into vagas (id, codigo, status) values (400, 'A-04', 'LIVRE');
-insert into vagas (id, codigo, status) values (500, 'A-05', 'LIVRE');
+insert into vagas (id, codigo, status) values (400, 'A-04', 'OCUPADA');
+insert into vagas (id, codigo, status) values (500, 'A-05', 'OCUPADA');
 
 insert into clientes_tem_vagas (numero_recibo, placa, marca, modelo, cor, data_entrada, id_cliente, id_vaga)
-    values ('20230313-101300', 'FIT-1A20', 'FIAT', 'PALIO', 'VERDE', '2023-03-13 10:15:00', 20, 100);
+values ('20230313-101300', 'FIT-1A20', 'FIAT', 'PALIO', 'VERDE', '2023-03-13 10:15:00', 20, 100);
 insert into clientes_tem_vagas (numero_recibo, placa, marca, modelo, cor, data_entrada, id_cliente, id_vaga)
-    values ('20230314-101400', 'SIE-1B20', 'FIAT', 'SIENA', 'BRANCO', '2023-03-14 10:15:00', 10, 200);
+values ('20230314-101400', 'SIE-1A20', 'FIAT', 'SIENA', 'BRANCO', '2023-03-14 10:15:00', 10, 200);
 insert into clientes_tem_vagas (numero_recibo, placa, marca, modelo, cor, data_entrada, id_cliente, id_vaga)
-    values ('20230315-101500', 'FIT-1C20', 'FIAT', 'PALIO', 'VERDE', '2023-03-14 10:15:00', 20, 300);
+values ('20230315-101500', 'FIT-1A20', 'FIAT', 'PALIO', 'VERDE', '2023-03-14 10:15:00', 20, 300);
+insert into clientes_tem_vagas (numero_recibo, placa, marca, modelo, cor, data_entrada, id_cliente, id_vaga)
+values ('20230316-101600', 'SIE-1A40', 'FIAT', 'SIENA', 'VERDE', '2023-03-14 10:15:00', 10, 400);
+insert into clientes_tem_vagas (numero_recibo, placa, marca, modelo, cor, data_entrada, id_cliente, id_vaga)
+values ('20230317-101700', 'SIE-1A50', 'FIAT', 'SIENA', 'VERDE', '2023-03-14 10:15:00', 20, 500);
