@@ -47,4 +47,136 @@ public class EstacionamentoIT {
                 .jsonPath("dataEntrada").exists()
                 .jsonPath("vagaCodigo").exists();
     }
+
+    @Test
+    public void criarCheckIn_ComRoleClient_RetornarErrorMessageComStatus403() {
+        EstacionamentoCreateDto createDto = EstacionamentoCreateDto.builder()
+                .placa("AAA-1A11")
+                .marca("PORSCHE")
+                .modelo("911")
+                .cor("AZUL")
+                .clienteCpf("60341191973")
+                .build();
+
+        testClient
+                .post()
+                .uri("/api/v1/estacionamentos/check-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "bia@gmail.com", "123456"))
+                .bodyValue(createDto)
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody()
+                .jsonPath("status").isEqualTo("403")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
+                .jsonPath("method").isEqualTo("POST");
+    }
+
+    @Test
+    public void criarCheckIn_ComDadosInvalidos_RetornarErrorMessageComStatus422() {
+        EstacionamentoCreateDto createDto = EstacionamentoCreateDto.builder()
+                .placa("")
+                .marca("PORSCHE")
+                .modelo("911")
+                .cor("AZUL")
+                .clienteCpf("60341191973")
+                .build();
+
+        testClient
+                .post()
+                .uri("/api/v1/estacionamentos/check-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(createDto)
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody()
+                .jsonPath("status").isEqualTo("422")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
+                .jsonPath("method").isEqualTo("POST");
+
+        createDto = EstacionamentoCreateDto.builder()
+                .placa("AAA-1A11")
+                .marca("")
+                .modelo("911")
+                .cor("AZUL")
+                .clienteCpf("60341191973")
+                .build();
+
+        testClient
+                .post()
+                .uri("/api/v1/estacionamentos/check-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(createDto)
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody()
+                .jsonPath("status").isEqualTo("422")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
+                .jsonPath("method").isEqualTo("POST");
+
+        createDto = EstacionamentoCreateDto.builder()
+                .placa("AAA-1A11")
+                .marca("PORSCHE")
+                .modelo("")
+                .cor("AZUL")
+                .clienteCpf("60341191973")
+                .build();
+
+        testClient
+                .post()
+                .uri("/api/v1/estacionamentos/check-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(createDto)
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody()
+                .jsonPath("status").isEqualTo("422")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
+                .jsonPath("method").isEqualTo("POST");
+
+        createDto = EstacionamentoCreateDto.builder()
+                .placa("AAA-1A11")
+                .marca("PORSCHE")
+                .modelo("911")
+                .cor("")
+                .clienteCpf("60341191973")
+                .build();
+
+        testClient
+                .post()
+                .uri("/api/v1/estacionamentos/check-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(createDto)
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody()
+                .jsonPath("status").isEqualTo("422")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
+                .jsonPath("method").isEqualTo("POST");
+
+        createDto = EstacionamentoCreateDto.builder()
+                .placa("AAA-1A11")
+                .marca("PORSCHE")
+                .modelo("911")
+                .cor("AZUL")
+                .clienteCpf("")
+                .build();
+
+        testClient
+                .post()
+                .uri("/api/v1/estacionamentos/check-in")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@gmail.com", "123456"))
+                .bodyValue(createDto)
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody()
+                .jsonPath("status").isEqualTo("422")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in")
+                .jsonPath("method").isEqualTo("POST");
+    }
 }
