@@ -10,6 +10,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.stereotype.Service;
 
+import static com.vinifillos.demoparkapi.entity.Vaga.StatusVaga.LIVRE;
+
 @Service
 @RequiredArgsConstructor
 public class VagaService {
@@ -32,6 +34,14 @@ public class VagaService {
     public Vaga buscarPorCodigo(String codigo) {
         return vagaRepository.findByCodigo(codigo).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Vaga com código %s não foi encontrada", codigo))
+        );
+    }
+
+    @Transactional
+    @ReadOnlyProperty
+    public Vaga buscarPorVagaLivre() {
+        return vagaRepository.findFirstByStatus(LIVRE).orElseThrow(
+                () -> new EntityNotFoundException("Nenhuma vaga livre foi encontrada")
         );
     }
 }
