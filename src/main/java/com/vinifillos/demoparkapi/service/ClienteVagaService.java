@@ -3,7 +3,10 @@ package com.vinifillos.demoparkapi.service;
 import com.vinifillos.demoparkapi.entity.ClienteVaga;
 import com.vinifillos.demoparkapi.exception.EntityNotFoundException;
 import com.vinifillos.demoparkapi.repository.ClienteVagaRepository;
+import com.vinifillos.demoparkapi.repository.projection.ClienteVagaProjection;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,5 +34,10 @@ public class ClienteVagaService {
     public long getTotalDeVezesEstacionamentoCompleto(String cpf) {
         return repository.countByClienteCpfAndDataSaidaIsNotNull(cpf);
 
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ClienteVagaProjection> buscarTodosPorClienteCpf(String cpf, Pageable pageable) {
+        return repository.findAllByClienteCpf(cpf, pageable);
     }
 }
