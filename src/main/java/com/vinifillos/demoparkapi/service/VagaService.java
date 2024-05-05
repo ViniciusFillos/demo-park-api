@@ -4,11 +4,10 @@ import com.vinifillos.demoparkapi.entity.Vaga;
 import com.vinifillos.demoparkapi.exception.CodigoUniqueViolationException;
 import com.vinifillos.demoparkapi.exception.EntityNotFoundException;
 import com.vinifillos.demoparkapi.repository.VagaRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.vinifillos.demoparkapi.entity.Vaga.StatusVaga.LIVRE;
 
@@ -29,16 +28,14 @@ public class VagaService {
         }
     }
 
-    @Transactional
-    @ReadOnlyProperty
+    @Transactional(readOnly = true)
     public Vaga buscarPorCodigo(String codigo) {
         return vagaRepository.findByCodigo(codigo).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Vaga com código %s não foi encontrada", codigo))
         );
     }
 
-    @Transactional
-    @ReadOnlyProperty
+    @Transactional(readOnly = true)
     public Vaga buscarPorVagaLivre() {
         return vagaRepository.findFirstByStatus(LIVRE).orElseThrow(
                 () -> new EntityNotFoundException("Nenhuma vaga livre foi encontrada")

@@ -1,30 +1,35 @@
 package com.vinifillos.demoparkapi.service;
 
-
 import com.vinifillos.demoparkapi.entity.ClienteVaga;
 import com.vinifillos.demoparkapi.exception.EntityNotFoundException;
 import com.vinifillos.demoparkapi.repository.ClienteVagaRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class ClienteVagaService {
 
-    private final ClienteVagaRepository clienteVagaRepository;
+    private final ClienteVagaRepository repository;
 
     @Transactional
     public ClienteVaga salvar(ClienteVaga clienteVaga) {
-        return clienteVagaRepository.save(clienteVaga);
+        return repository.save(clienteVaga);
     }
 
-    @Transactional
-    @ReadOnlyProperty
+    @Transactional(readOnly = true)
     public ClienteVaga buscarPorRecibo(String recibo) {
-            return clienteVagaRepository.findByReciboAndDataSaidaIsNull(recibo).orElseThrow(
-                    () -> new EntityNotFoundException(String.format("Recibo %s não encontrado no sistema ou check-out já realizado", recibo))
-            );
+        return repository.findByReciboAndDataSaidaIsNull(recibo).orElseThrow(
+                () -> new EntityNotFoundException(
+                        String.format("Recibo '%s' não encontrado no sistema ou check-out já realizado", recibo)
+                )
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public long getTotalDeVezesEstacionamentoCompleto(String cpf) {
+        return repository.countByClienteCpfAndDataSaidaIsNotNull(cpf);
+
     }
 }
