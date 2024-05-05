@@ -5,11 +5,11 @@ import com.vinifillos.demoparkapi.exception.EntityNotFoundException;
 import com.vinifillos.demoparkapi.exception.PasswordInvalidException;
 import com.vinifillos.demoparkapi.exception.UsernameUniqueViolationException;
 import com.vinifillos.demoparkapi.repository.UsuarioRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class UsuarioService {
 
     }
 
-    @Transactional()
+    @Transactional
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Usuário id='%s' não encontrado", id))

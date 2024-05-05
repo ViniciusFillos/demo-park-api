@@ -7,7 +7,6 @@ import com.vinifillos.demoparkapi.repository.ClienteRepository;
 import com.vinifillos.demoparkapi.repository.projection.ClienteProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,23 +28,27 @@ public class ClienteService {
         }
     }
 
-    @Transactional
-    @ReadOnlyProperty
+    @Transactional(readOnly = true)
     public Cliente buscarPorId(Long id) {
         return clienteRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Cliente id=%s não encontrado no sistema", id))
         );
     }
 
-    @Transactional
-    @ReadOnlyProperty
+    @Transactional(readOnly = true)
     public Page<ClienteProjection> getAll(Pageable pageable) {
         return clienteRepository.findAllPageable(pageable);
     }
 
-    @Transactional
-    @ReadOnlyProperty
+    @Transactional(readOnly = true)
     public Cliente buscarPorUsuarioId(Long id) {
         return clienteRepository.findByUsuarioId(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Cliente buscarPorCpf(String cpf) {
+        return clienteRepository.findByCpf(cpf).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Cliente com CPF %s não encontrado", cpf))
+        );
     }
 }
