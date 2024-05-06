@@ -26,7 +26,7 @@ public class JasperService {
     private final ResourceLoader resourceLoader;
     private final DataSource dataSource;
 
-    private final Map<String, Object> params = new HashMap<>();
+    private Map<String, Object> params = new HashMap<>();
 
     private static final String JASPER_DIRETORIO = "classpath:reports/";
 
@@ -43,7 +43,7 @@ public class JasperService {
             InputStream stream = resource.getInputStream();
             JasperPrint print = JasperFillManager.fillReport(stream, params, dataSource.getConnection());
             bytes = JasperExportManager.exportReportToPdf(print);
-        } catch (IOException | SQLException | JRException e) {
+        } catch (IOException | JRException | SQLException e) {
             log.error("Jasper Reports ::: ", e.getCause());
             throw new RuntimeException(e);
         }
